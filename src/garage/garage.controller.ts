@@ -7,7 +7,7 @@ export class GarageController {
     constructor(private garageServices: GarageService){};
 
     @Get()
-    trucks() {
+    garage() {
         return this.garageServices.getGarageTrucks();
     }
 
