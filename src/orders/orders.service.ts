@@ -7,26 +7,38 @@ export class OrdersService {
     private orders: Order[] = [
         {
             _id: 1,
-            desc: 'dadasdasdasdasdad',
+            desc: 'Pendente 1',
             size: 2,
             weight: 2,
             amount: 2,
             container: 2,
             addressin: 'dasdasda',
             addressout: 'dadadsadadas',
-            status: true
+            status: false
         },
         {
             _id: 2,
-            desc: 'hfdghfghfg',
+            desc: 'Em Andamento 2',
             size: 2,
             weight: 2,
             amount: 2,
             container: 2,
             addressin: 'hfghgfh',
             addressout: 'hgfhfg',
-            status: false
+            status: true
+        },
+        {
+            _id: 3,
+            desc: 'Em Andamento 3',
+            size: 2,
+            weight: 2,
+            amount: 2,
+            container: 2,
+            addressin: 'hfghgfh',
+            addressout: 'hgfhfg',
+            status: true
         }
+        
     ];
 
     getOrders() {
