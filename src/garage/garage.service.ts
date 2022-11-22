@@ -7,7 +7,7 @@ export class GarageService {
     private trucks: Truck[] = [
         {
             _id: 1,
-            model: 'Merces Beazn 55 300',
+            model: 'xxxxx',
             plateNumber: 'ABC-1A33',
             axle: 'Eixo Triplo',
             maxcapacity: 100,
@@ -16,7 +16,7 @@ export class GarageService {
         {
             _id: 2,
             model: 'Merces Beazn 55 300',
-            plateNumber: 'ABC-1A33',
+            plateNumber: 'ABC-1A33f',
             axle: 'Eixo Triplo',
             maxcapacity: 100,
             status: true
@@ -25,6 +25,10 @@ export class GarageService {
 
     getGarageTrucks() {
         return this.trucks;
+    }
+
+    getAvailibleTrucks(){
+        return this.trucks.filter(e => e.status === true);
     }
 
 }

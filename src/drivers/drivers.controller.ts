@@ -11,4 +11,9 @@ export class DriversController {
         return this.driversServices.getDrivers();
     }
 
+    @Get('/avaliable')
+    avaliableDrivers( ) {
+        return this.driversServices.getAvailibleDrivers();
+    }
+
 }

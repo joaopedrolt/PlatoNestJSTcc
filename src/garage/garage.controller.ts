@@ -11,4 +11,9 @@ export class GarageController {
         return this.garageServices.getGarageTrucks();
     }
 
+    @Get('/avaliable')
+    avaliableTruck( ) {
+        return this.garageServices.getAvailibleTrucks();
+    }
+
 }

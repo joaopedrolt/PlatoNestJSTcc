@@ -11,5 +11,4 @@ export class DashboardController {
         return this.dashBoardServices.getGlData();
     }
 
-
 }

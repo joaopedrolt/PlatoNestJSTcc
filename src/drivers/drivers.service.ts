@@ -22,4 +22,8 @@ export class DriversService {
         return this.drivers;
     }
 
+    getAvailibleDrivers(){
+        return this.drivers.filter(e => e.status === true);
+    }
+
 }

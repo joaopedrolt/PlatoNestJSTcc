@@ -1,5 +1,5 @@
 export interface Gl {
-    yield: number;
+    yield: string;
     deliveries: number;
     available: number;
     date: string;
