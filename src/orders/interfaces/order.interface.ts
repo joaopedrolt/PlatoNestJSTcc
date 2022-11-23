@@ -1,3 +1,6 @@
+import { Driver } from "src/drivers/interfaces/drivers.interface";
+import { Truck } from "src/garage/interfaces/truck.interface";
+
 export interface Order {
     _id: number;
     desc: string;
@@ -8,4 +11,6 @@ export interface Order {
     addressin: string;
     addressout: string;
     status: boolean;
+    driver?: Driver;
+    truck?: Truck;
 }

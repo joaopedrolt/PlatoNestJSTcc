@@ -13,7 +13,7 @@ export class DriversService {
         {
             _id: 2,
             name: 'Marcos Henrique',
-            status: false,
+            status: true,
             orderid: 1
         }
     ];
@@ -23,7 +23,7 @@ export class DriversService {
     }
 
     getAvailibleDrivers(){
-        return this.drivers.filter(e => e.status === true);
+        return this.drivers.filter(e => e.status === false);
     }
 
 }

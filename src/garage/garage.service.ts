@@ -28,7 +28,7 @@ export class GarageService {
     }
 
     getAvailibleTrucks(){
-        return this.trucks.filter(e => e.status === true);
+        return this.trucks.filter(e => e.status === false);
     }
 
 }
