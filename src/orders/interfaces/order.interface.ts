@@ -9,8 +9,11 @@ export interface Order {
     amount: number;
     container: number;
     addressin: string;
+    cepin: string;
     addressout: string;
+    cepout: string;
     status: boolean;
+    statusdesc: string;
     driver?: Driver;
     truck?: Truck;
 }

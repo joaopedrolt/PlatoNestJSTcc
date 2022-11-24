@@ -12,8 +12,13 @@ export class DriversController {
     }
 
     @Get('/avaliable')
-    avaliableDrivers( ) {
+    avaliableDrivers() {
         return this.driversServices.getAvailibleDrivers();
+    }
+
+    @Get("/test")
+    getBitcoinPrice() {
+        return this.driversServices.getDistance();
     }
 
 }

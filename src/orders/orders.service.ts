@@ -13,8 +13,11 @@ export class OrdersService {
             amount: 2,
             container: 2,
             addressin: 'dasdasda',
+            cepin: '09271-420',
             addressout: 'dadadsadadas',
-            status: false
+            cepout: '09271-420',
+            status: false,
+            statusdesc: 'Alocar recursos'
         },
         {
             _id: 2,
@@ -24,8 +27,11 @@ export class OrdersService {
             amount: 2,
             container: 2,
             addressin: 'hfghgfh',
+            cepin: '09271-420',
             addressout: 'hgfhfg',
+            cepout: '09271-420',
             status: true,
+            statusdesc: 'Aguardando motorista sair p/ retirar carga',
             truck: {
                 _id: 2,
                 model: 'Merces Beazn 55 300',
@@ -49,8 +55,11 @@ export class OrdersService {
             amount: 2,
             container: 2,
             addressin: 'hfghgfh',
+            cepin: '09271-420',
             addressout: 'hgfhfg',
+            cepout: '09271-420',
             status: true,
+            statusdesc: 'Aguardando motorista sair p/ retirar carga',
             truck: {
                 _id: 1,
                 model: 'xxxxx',
