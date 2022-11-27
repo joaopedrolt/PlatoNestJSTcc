@@ -16,4 +16,5 @@ export interface Order {
     statusdesc: string;
     driver?: Driver;
     truck?: Truck;
+    price: number;
 }

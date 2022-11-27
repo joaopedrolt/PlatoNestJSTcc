@@ -1,10 +1,11 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { GarageService } from './garage.service';
+import { TruckAdd } from './interfaces/truck-add.dto';
 
 @Controller('garage')
 export class GarageController {
 
-    constructor(private garageServices: GarageService){};
+    constructor(private garageServices: GarageService) { };
 
     @Get()
     garage() {
@@ -12,13 +13,18 @@ export class GarageController {
     }
 
     @Get('/avaliable')
-    avaliableTruck( ) {
+    avaliableTruck() {
         return this.garageServices.getAvailibleTrucks();
     }
 
     @Post('/add')
-    addTruck( ) {
-       
+    addTruck(@Body() truckAdd: TruckAdd) {
+        return this.garageServices.addNewTruck(truckAdd);
+    }
+
+    @Post('/delete')
+    deleteTruck(@Body() { _id }: { _id: number }) {
+        return this.garageServices.deleteTruck(_id);
     }
 
 }

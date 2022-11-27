@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { TruckAdd } from './interfaces/truck-add.dto';
 import { Truck } from './interfaces/truck.interface';
 
 @Injectable()
@@ -27,8 +28,20 @@ export class GarageService {
         return this.trucks;
     }
 
-    getAvailibleTrucks(){
+    getAvailibleTrucks() {
         return this.trucks.filter(e => e.status === false);
+    }
+
+    addNewTruck(truckAdd: TruckAdd) {
+        const { model, plateNumber, axle, maxcapacity } = truckAdd;
+        this.trucks.push({ _id: 3, model, plateNumber, axle, maxcapacity, status: false })
+        return truckAdd;
+    }
+
+    deleteTruck(_id: number) {
+        const index = this.trucks.findIndex(truck => { return truck._id === _id });
+        this.trucks = this.trucks.filter( truck => { return truck._id != _id });
+        return { result: 'done'};
     }
 
 }

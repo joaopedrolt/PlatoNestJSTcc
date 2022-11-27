@@ -17,7 +17,8 @@ export class OrdersService {
             addressout: 'dadadsadadas',
             cepout: '09271-420',
             status: false,
-            statusdesc: 'Alocar recursos'
+            statusdesc: 'Alocar recursos',
+            price: 0
         },
         {
             _id: 2,
@@ -45,7 +46,8 @@ export class OrdersService {
                 name: 'Joao Pedro Lima',
                 status: true,
                 orderid: 2
-            }
+            },
+            price: 0
         },
         {
             _id: 3,
@@ -73,9 +75,9 @@ export class OrdersService {
                 name: 'Marcos Henrique',
                 status: true,
                 orderid: 3
-            }
+            },
+            price: 0
         }
-
     ];
 
     getOrders() {
