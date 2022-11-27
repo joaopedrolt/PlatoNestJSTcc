@@ -26,7 +26,7 @@ export class OrdersPriceService {
         const destinations = encodeURIComponent(cepOut.logradouro + '+' + cepOut.localidade + '+' + cepOut.uf)
 
         return this.http
-            .get(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origins}&destinations=${destinations}&units=metric&key=AIzaSyAvDJR7162n3hAOb0TuQafdssfXy7VwtnA`)
+            .get(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origins}&destinations=${destinations}&units=metric&key=`)
             .pipe(
                 map((res) => res.data?.rows),
                 map((rows) => rows?.[0].elements),
