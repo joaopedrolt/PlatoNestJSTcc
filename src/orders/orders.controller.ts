@@ -9,6 +9,11 @@ export class OrdersController {
 
     constructor(private ordersServices: OrdersService, private ordersPriceServices: OrdersPriceService) { };
 
+    @Post('/teste')
+    teste() {
+        return this.ordersServices.test();
+    }
+
     @Get()
     orders() {
         return this.ordersServices.getOrders();

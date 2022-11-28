@@ -117,50 +117,23 @@ export class OrdersService {
 
         const { driver, truck } = orderUpdateDto;
 
-        const requestConfig: AxiosRequestConfig<any> = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            params: {
-                param1: driver
-            }
-        };
-
-        const data = await lastValueFrom(
-            this.httpService.post(url, data, options).pipe(
-              map(resp => res.data)
-            )
-          );
-
-       /*  const options: AxiosRequestConfig = {
-            method: 'Post',
-            url: 'http://localhost:3000/api/drivers/update',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-          }; */
-
-
-
-        
-
-        const responseData = await lastValueFrom(
-            this.http.post('http://localhost:3000/api/drivers/update', null, options).pipe(
-                map((response) => {
-                    return response.data;
-                }),
-            ),
-        );
-
-
-        
-
-
-
         let orderCopy = this.orders[index];
         orderCopy = { ...orderCopy, statusdesc: 'Aguardando motorista sair p/ retirar carga', status: true, driver: driver, truck: truck }
 
         this.orders.splice(index, 1, orderCopy);
+
+    }
+
+    test(){
+
+        const url = 'http://localhost:3000/api/drivers/update';
+
+        this.http.post(url, {
+            _id: 4,
+            name: 'Giovanni Diniz',
+            status: true,
+            orderid: 2
+        }, )
 
     }
 
