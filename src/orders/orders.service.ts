@@ -1,36 +1,38 @@
+import { HttpService } from '@nestjs/axios';
+import { AxiosRequestConfig, } from 'axios';
 import { Injectable } from '@nestjs/common';
+import { lastValueFrom, map } from 'rxjs';
+import { OrderUpdateDto } from './interfaces/order.dto';
 import { Order } from './interfaces/order.interface';
 
 @Injectable()
 export class OrdersService {
 
+    constructor(private http: HttpService) { }
+
     private orders: Order[] = [
         {
             _id: 1,
-            desc: 'Pendente 1',
-            size: 2,
-            weight: 2,
-            amount: 2,
-            container: 2,
-            addressin: 'dasdasda',
-            cepin: '09271-420',
-            addressout: 'dadadsadadas',
-            cepout: '09271-420',
+            desc: '500 Sacos de Arroz Camil - Para Hipermercado Coop Capuava',
+            weight: 4000,
+            addressin: 'R. Fortunato Ferraz, 1141 - Vila Anastácio, São Paulo - SP',
+            cepin: '05093-000',
+            addressout: 'Av. das Nações, 1600 - Parque Erasmo Assunção, Santo André',
+            cepout: '09270-400',
             status: false,
             statusdesc: 'Alocar recursos',
-            price: 0
+            price: 4030.00,
+            distance: "40.3 km"
+
         },
         {
             _id: 2,
-            desc: 'Em Andamento 2',
-            size: 2,
-            weight: 2,
-            amount: 2,
-            container: 2,
-            addressin: 'hfghgfh',
-            cepin: '09271-420',
-            addressout: 'hgfhfg',
-            cepout: '09271-420',
+            desc: '100 Fardos de Leite Mococca - Para Hipermercado Coop Capuava',
+            weight: 2000,
+            addressin: 'R. Gabriel Pinheiro, 1030 - Centro, Mococa - SP',
+            cepin: '13730-090',
+            addressout: 'Av. das Nações, 1600 - Parque Erasmo Assunção, Santo André',
+            cepout: '09270-400',
             status: true,
             statusdesc: 'Aguardando motorista sair p/ retirar carga',
             truck: {
@@ -43,31 +45,29 @@ export class OrdersService {
             },
             driver: {
                 _id: 1,
-                name: 'Joao Pedro Lima',
+                name: 'Giovanni Diniz',
                 status: true,
                 orderid: 2
             },
-            price: 0
+            price: 14400.00,
+            distance: "288 km"
         },
         {
             _id: 3,
-            desc: 'Em Andamento 3',
-            size: 2,
-            weight: 2,
-            amount: 2,
-            container: 2,
-            addressin: 'hfghgfh',
-            cepin: '09271-420',
-            addressout: 'hgfhfg',
-            cepout: '09271-420',
+            desc: '100 Fardos de Cerveja Itaipava - Para HiperMercado Coop Capuava',
+            weight: 1000,
+            addressin: 'R. Trajano Paula Filho, 199 - Pedro do Rio, Petrópolis',
+            cepin: '25750-160',
+            addressout: 'Av. das Nações, 1600 - Parque Erasmo Assunção, Santo André',
+            cepout: '09270-400',
             status: true,
             statusdesc: 'Aguardando motorista sair p/ retirar carga',
             truck: {
                 _id: 1,
-                model: 'xxxxx',
-                plateNumber: 'ABC-1A33',
-                axle: 'Eixo Triplo',
-                maxcapacity: 100,
+                model: 'Carreta Baú Sider Vanderleia',
+                plateNumber: 'DCA-1A23',
+                axle: 'Eixo Padrão',
+                maxcapacity: 2000,
                 status: true
             },
             driver: {
@@ -76,7 +76,8 @@ export class OrdersService {
                 status: true,
                 orderid: 3
             },
-            price: 0
+            price: 10890.00,
+            distance: "495 km"
         }
     ];
 
@@ -87,6 +88,80 @@ export class OrdersService {
     getOrderById(id: string) {
         let order = this.orders.find(order => order._id == parseInt(id));
         return order;
+    }
+
+    async addOrder(order: Order) {
+
+        const path = `http://localhost:3000/api/orders/dp?cepin=${order.cepin}&cepout=${order.cepout}&weight=${order.weight}`;
+
+        const responseDp = this.http.get(path).pipe(map((res) => res.data));
+        let distanceAndPrice = await lastValueFrom(responseDp);
+        const { price, distance } = distanceAndPrice;
+
+        const copyOrder: Order = { ...order, distance: distance, price: parseFloat(price) }
+
+        try {
+            this.orders.push(copyOrder);
+            return { done: 'worked' };
+        } catch (error) {
+            return { error: error };
+        }
+
+    }
+
+    async updateOrder(id: string, orderUpdateDto: OrderUpdateDto) {
+
+        const index = this.orders.findIndex(order => {
+            return order._id === parseInt(id);
+        });
+
+        const { driver, truck } = orderUpdateDto;
+
+        const requestConfig: AxiosRequestConfig<any> = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            params: {
+                param1: driver
+            }
+        };
+
+        const data = await lastValueFrom(
+            this.httpService.post(url, data, options).pipe(
+              map(resp => res.data)
+            )
+          );
+
+       /*  const options: AxiosRequestConfig = {
+            method: 'Post',
+            url: 'http://localhost:3000/api/drivers/update',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+          }; */
+
+
+
+        
+
+        const responseData = await lastValueFrom(
+            this.http.post('http://localhost:3000/api/drivers/update', null, options).pipe(
+                map((response) => {
+                    return response.data;
+                }),
+            ),
+        );
+
+
+        
+
+
+
+        let orderCopy = this.orders[index];
+        orderCopy = { ...orderCopy, statusdesc: 'Aguardando motorista sair p/ retirar carga', status: true, driver: driver, truck: truck }
+
+        this.orders.splice(index, 1, orderCopy);
+
     }
 
 }

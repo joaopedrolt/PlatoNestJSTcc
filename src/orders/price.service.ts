@@ -4,7 +4,7 @@ import { HttpService } from '@nestjs/axios';
 import { map, lastValueFrom } from 'rxjs';
 
 import { Cep } from './interfaces/cep.type';
-import { Order } from './interfaces/order.interface';
+import { OrderDto } from './interfaces/order.dto';
 
 @Injectable()
 export class OrdersPriceService {
@@ -26,7 +26,7 @@ export class OrdersPriceService {
         const destinations = encodeURIComponent(cepOut.logradouro + '+' + cepOut.localidade + '+' + cepOut.uf)
 
         return this.http
-            .get(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origins}&destinations=${destinations}&units=metric&key=`)
+            .get(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${origins}&destinations=${destinations}&units=metric&key=AIzaSyAvDJR7162n3hAOb0TuQafdssfXy7VwtnA`)
             .pipe(
                 map((res) => res.data?.rows),
                 map((rows) => rows?.[0].elements),
@@ -38,18 +38,37 @@ export class OrdersPriceService {
 
     }
 
-    async getPrice(order: Order) {
+    async getPrice(order: OrderDto) {
 
-        const path = "http://localhost:3000/api/orders/distance?cepin=" + order.cepin + "&cepout=" + order.cepout;
+        const path = "http://localhost:3000/api/orders/distance?cepin=" + order.cepIn + "&cepout=" + order.cepOut;
 
         const responseCepIn = this.http.get(path).pipe(map(res => res.data));
         let distance: string = await lastValueFrom(responseCepIn);
         distance = distance.replace(' km', '');
         distance = distance.replace(',', '');
-        
+
         const price = order.weight * (parseFloat(distance) * 0.1);
 
         return price.toFixed(2);
+
+    }
+
+    async getDistanceAndPrice(order: OrderDto) {
+
+        const path = "http://localhost:3000/api/orders/distance?cepin=" + order.cepIn + "&cepout=" + order.cepOut;
+
+        const responseCepIn = this.http.get(path).pipe(map(res => res.data));
+        let distance: string = await lastValueFrom(responseCepIn);
+
+        const distanceCopy = distance;
+
+        distance = distance.replace(' km', '');
+        distance = distance.replace(',', '');
+
+        const price = order.weight * (parseFloat(distance) * 0.025);
+
+        return {price: price.toFixed(2), distance: distanceCopy};
+
     }
 
 }

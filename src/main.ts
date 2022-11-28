@@ -6,7 +6,7 @@ async function bootstrap() {
   app.setGlobalPrefix("api");
   app.enableCors({
     origin: true,
-    methods: 'GET',
+    methods: ['GET', 'PATCH'],
     credentials: true
   })
   await app.listen(3000);

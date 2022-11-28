@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { DriversService } from './drivers.service';
+import { Driver } from './interfaces/drivers.interface';
 
 @Controller('drivers')
 export class DriversController {
@@ -16,9 +17,9 @@ export class DriversController {
         return this.driversServices.getAvailibleDrivers();
     }
 
-    @Get("/test")
-    getBitcoinPrice() {
-        return this.driversServices.getDistance();
+    @Post('/update')
+    driverUpdate(@Body() driver: Driver) {
+        return this.driversServices.driverUpdate(driver);
     }
 
 }

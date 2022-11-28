@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { GarageService } from './garage.service';
 import { TruckAdd } from './interfaces/truck-add.dto';
+import { Truck } from './interfaces/truck.interface';
 
 @Controller('garage')
 export class GarageController {
@@ -25,6 +26,11 @@ export class GarageController {
     @Post('/delete')
     deleteTruck(@Body() { _id }: { _id: number }) {
         return this.garageServices.deleteTruck(_id);
+    }
+
+    @Post('/update')
+    truckUpdate(@Body() truck: Truck) {
+        return this.garageServices.truckUpdate(truck);
     }
 
 }

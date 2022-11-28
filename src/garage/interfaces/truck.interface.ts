@@ -5,4 +5,5 @@ export interface Truck {
     axle: string;
     maxcapacity: number;
     status: boolean;
+    orderid?: number;
 }

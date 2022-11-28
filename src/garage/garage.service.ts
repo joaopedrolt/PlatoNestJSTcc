@@ -8,19 +8,27 @@ export class GarageService {
     private trucks: Truck[] = [
         {
             _id: 1,
-            model: 'xxxxx',
-            plateNumber: 'ABC-1A33',
-            axle: 'Eixo Triplo',
-            maxcapacity: 100,
+            model: 'Carreta Sider Carreta Baú Vanderleia',
+            plateNumber: 'DCA-1A23',
+            axle: 'Eixo Padrão',
+            maxcapacity: 2000,
             status: true
         },
         {
             _id: 2,
             model: 'Merces Beazn 55 300',
-            plateNumber: 'ABC-1A33f',
+            plateNumber: 'ABC-1A32',
             axle: 'Eixo Triplo',
-            maxcapacity: 100,
+            maxcapacity: 1000,
             status: true
+        },
+        {
+            _id: 3,
+            model: 'Fachini Rodocaçamba 2023',
+            plateNumber: 'LFV-2A64',
+            axle: 'Eixo Triplo',
+            maxcapacity: 4000,
+            status: false
         }
     ];
 
@@ -39,9 +47,18 @@ export class GarageService {
     }
 
     deleteTruck(_id: number) {
-        const index = this.trucks.findIndex(truck => { return truck._id === _id });
-        this.trucks = this.trucks.filter( truck => { return truck._id != _id });
-        return { result: 'done'};
+        this.trucks = this.trucks.filter(truck => { return truck._id != _id });
+        return { result: 'done' };
+    }
+
+    truckUpdate(truckParam: Truck) {
+
+        const index = this.trucks.findIndex(truck => {
+            return truck._id === truckParam._id;
+        });
+
+        this.trucks.splice(index, 1, truckParam);
+
     }
 
 }

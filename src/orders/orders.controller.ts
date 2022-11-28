@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { OrderDto, OrderUpdateDto } from './interfaces/order.dto';
 import { Order } from './interfaces/order.interface';
 import { OrdersService } from './orders.service';
 import { OrdersPriceService } from './price.service';
@@ -13,18 +14,35 @@ export class OrdersController {
         return this.ordersServices.getOrders();
     }
 
+    @Get('/dp')
+    getPriceAndDistance(@Query() order) {
+        const orderDto: OrderDto = { cepOut: order.cepout, cepIn: order.cepin, weight: parseFloat(order.weight) }
+        return this.ordersPriceServices.getDistanceAndPrice(orderDto);
+    }
+
     @Get('/distance')
     getDistance(@Query() query) {
         return this.ordersPriceServices.getDistance(query.cepin, query.cepout);
     }
 
+    @Patch('/update/:id')
+    update(@Param('id') id: string, @Body() orderUpdateDto: OrderUpdateDto) {
+    return this.ordersServices.updateOrder(id, orderUpdateDto);
+  }
+
     @Get('/price')
-    getPrice(@Body () order: Order) {
-        return this.ordersPriceServices.getPrice(order);
+    getPrice(@Query() order) {
+        const orderDto: OrderDto = { cepOut: order.cepout, cepIn: order.cepin, weight: parseFloat(order.weight) }
+        return this.ordersPriceServices.getPrice(orderDto);
+    }
+
+    @Post('/add')
+    addOrder(@Body() order: Order) {
+        return this.ordersServices.addOrder(order);
     }
 
     @Get(':id')
-    order(@Param('id') id: string) {
+    getOrder(@Param('id') id: string) {
         return this.ordersServices.getOrderById(id);
     }
 
