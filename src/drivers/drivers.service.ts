@@ -1,68 +1,45 @@
-import { Injectable, ForbiddenException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+
 import { Driver } from './interfaces/drivers.interface';
+import { DriverDto } from './interfaces/driver.dto';
 
 import { HttpService } from "@nestjs/axios";
 
-import { map, catchError } from 'rxjs';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+
 
 @Injectable()
 export class DriversService {
 
-    constructor(private http: HttpService) { }
+    constructor(@InjectModel('Drivers') private driversModel: Model<Driver>, private http: HttpService) { }
 
-    private drivers: Driver[] = [
-        {
-            _id: 1,
-            name: 'Giovanni Diniz',
-            status: true,
-            orderid: 2
-        },
-        {
-            _id: 2,
-            name: 'Marcos Henrique',
-            status: true,
-            orderid: 3
-        },
-        {
-            _id: 3,
-            name: 'Gabriel Uchoa',
-            status: false
+    async getDrivers() {
+        return await this.driversModel.find().exec();
+    }
+
+    async addDrivers(driverDto: DriverDto) {
+        const newDriver = new this.driversModel(driverDto);
+        return await newDriver.save();
+    }
+
+    async deleteDrivers(_id: string) {
+        return await this.driversModel.remove({ _id: '' }).exec();
+    }
+
+    async getAvailibleDrivers() {
+        return await this.driversModel.find({ status: false }).exec();
+    }
+
+    async driverUpdate(driverParam: Driver) {
+
+        const driver = {
+            name: driverParam.name,
+            status: driverParam.status,
+            orderid: driverParam.orderid,
         }
-    ];
 
-    async getDistance() {
-        return this.http
-            .get('https://maps.googleapis.com/maps/api/distancematrix/json?origins=Washington%2C%20DC&destinations=New%20York%20City%2C%20NY&units=imperial&key=AIzaSyAvDJR7162n3hAOb0TuQafdssfXy7VwtnA')
-            .pipe(
-                map((res) => res.data?.rows),
-                map((rows) => rows?.[0].elements),
-                map((elements) => elements?.[0].distance),
-                map((distance) => {
-                    return distance?.text;
-                }),
-            )
-            .pipe(
-                catchError(() => {
-                    throw new ForbiddenException('API not available');
-                }),
-            );
-    }
-
-    getDrivers() {
-        return this.drivers;
-    }
-
-    getAvailibleDrivers() {
-        return this.drivers.filter(e => e.status === false);
-    }
-
-    driverUpdate(driverParam: Driver) {
-
-        const index = this.drivers.findIndex(driver => {
-            return driver._id === driverParam._id;
-        });
-
-        this.drivers.splice(index, 1, driverParam);
+        return await this.driversModel.findOneAndReplace({ _id: driverParam._id }, driver).exec();
 
     }
 

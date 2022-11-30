@@ -1,16 +1,20 @@
-import { HttpService } from '@nestjs/axios';
-import { AxiosRequestConfig, } from 'axios';
 import { Injectable } from '@nestjs/common';
+
+import { HttpService } from '@nestjs/axios';
 import { lastValueFrom, map } from 'rxjs';
-import { OrderUpdateDto } from './interfaces/order.dto';
+
+import { AcceptOrder, OrderAdd, OrderUpdateDto } from './interfaces/order.dto';
 import { Order } from './interfaces/order.interface';
+
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class OrdersService {
 
-    constructor(private http: HttpService) { }
+    constructor(@InjectModel('Orders') private ordersModel: Model<Order>, private http: HttpService) { }
 
-    private orders: Order[] = [
+    private orders: Order[] = [/* 
         {
             _id: 1,
             desc: '500 Sacos de Arroz Camil - Para Hipermercado Coop Capuava',
@@ -22,8 +26,8 @@ export class OrdersService {
             status: false,
             statusdesc: 'Alocar recursos',
             price: 4030.00,
-            distance: "40.3 km"
-
+            distance: "40.3 km",
+            accepted: true
         },
         {
             _id: 2,
@@ -50,7 +54,8 @@ export class OrdersService {
                 orderid: 2
             },
             price: 14400.00,
-            distance: "288 km"
+            distance: "288 km",
+            accepted: true
         },
         {
             _id: 3,
@@ -77,32 +82,59 @@ export class OrdersService {
                 orderid: 3
             },
             price: 10890.00,
-            distance: "495 km"
-        }
+            distance: "495 km",
+            accepted: true
+        },
+        {
+            _id: 4,
+            desc: "400 Caixas de Salgadinho Fandangos - Para Hipermercado Coop Capuava",
+            weight: 800,
+            addressin: "R. Jaime Ribeiro Wright, 1200 - Colônia (Zona Leste), São Paulo - SP",
+            cepin: "08260-070",
+            addressout: "Av. das Nações, 1600 - Parque Erasmo Assunção, Santo André",
+            cepout: "09270-400",
+            status: false,
+            accepted: false,
+            statusdesc: "Aguardando aprovação",
+            distance: "16.6 km",
+            price: 332
+        }*/
     ];
 
-    getOrders() {
-        return this.orders;
+    async getOrders() {
+        return await this.ordersModel.find().exec();
     }
 
-    getOrderById(id: string) {
-        let order = this.orders.find(order => order._id == parseInt(id));
-        return order;
+    async getOrderById(id: string) {
+        return await this.ordersModel.findOne({ _id: id }).exec();
     }
 
-    async addOrder(order: Order) {
+    async addOrder(order: OrderAdd) {
 
         const path = `http://localhost:3000/api/orders/dp?cepin=${order.cepin}&cepout=${order.cepout}&weight=${order.weight}`;
 
         const responseDp = this.http.get(path).pipe(map((res) => res.data));
         let distanceAndPrice = await lastValueFrom(responseDp);
+
         const { price, distance } = distanceAndPrice;
 
-        const copyOrder: Order = { ...order, distance: distance, price: parseFloat(price) }
+        const copyOrder = {
+            desc: order.desc,
+            weight: order.weight,
+            addressin: order.addressin,
+            cepin: order.cepin,
+            addressout: order.addressout,
+            cepout: order.cepout,
+            status: false,
+            accepted: false,
+            statusdesc: 'Aguardando aprovação',
+            distance: distance,
+            price: parseFloat(price)
+        }
 
         try {
-            this.orders.push(copyOrder);
-            return { done: 'worked' };
+            const newOrder = new this.ordersModel(copyOrder);
+            return await newOrder.save();
         } catch (error) {
             return { error: error };
         }
@@ -111,29 +143,55 @@ export class OrdersService {
 
     async updateOrder(id: string, orderUpdateDto: OrderUpdateDto) {
 
-        const index = this.orders.findIndex(order => {
-            return order._id === parseInt(id);
-        });
-
         const { driver, truck } = orderUpdateDto;
 
-        let orderCopy = this.orders[index];
-        orderCopy = { ...orderCopy, statusdesc: 'Aguardando motorista sair p/ retirar carga', status: true, driver: driver, truck: truck }
+        const order = await this.ordersModel.findOne({ _id: id }).exec();
 
-        this.orders.splice(index, 1, orderCopy);
+        const orderCopy = {
+            desc: order.desc,
+            weight: order.weight,
+            addressin: order.addressin,
+            cepin: order.cepin,
+            addressout: order.addressout,
+            cepout: order.cepout,
+            status: true,
+            statusdesc: 'Aguardando motorista sair para retirar carga',
+            driver: driver,
+            truck: truck,
+            price: order.price,
+            distance: order.distance,
+            accepted: order.accepted
+        };
+
+        return await this.ordersModel.findOneAndReplace({ _id: id }, orderCopy).exec();
 
     }
 
-    test(){
+    async acceptOrder(accept: AcceptOrder) {
 
-        const url = 'http://localhost:3000/api/drivers/update';
+        if (accept.accepted) {
 
-        this.http.post(url, {
-            _id: 4,
-            name: 'Giovanni Diniz',
-            status: true,
-            orderid: 2
-        }, )
+            const order = await this.ordersModel.findOne({ _id: accept.orderId }).exec();
+
+            const orderCopy = {
+                desc: order.desc,
+                weight: order.weight,
+                addressin: order.addressin,
+                cepin: order.cepin,
+                addressout: order.addressout,
+                cepout: order.cepout,
+                status: order.status,
+                statusdesc: 'Alocar recursos',
+                price: order.price,
+                distance: order.distance,
+                accepted: accept.accepted
+            };
+
+            return await this.ordersModel.findOneAndReplace({ _id: accept.orderId }, orderCopy).exec();
+
+        } else {
+            return await this.ordersModel.remove({ _id: accept.orderId }).exec();
+        }
 
     }
 

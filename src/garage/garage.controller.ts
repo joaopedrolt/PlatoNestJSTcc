@@ -24,7 +24,7 @@ export class GarageController {
     }
 
     @Post('/delete')
-    deleteTruck(@Body() { _id }: { _id: number }) {
+    deleteTruck(@Body() { _id }: { _id: string }) {
         return this.garageServices.deleteTruck(_id);
     }
 

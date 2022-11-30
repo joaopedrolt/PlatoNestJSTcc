@@ -1,6 +1,8 @@
-export interface Driver {
-    _id: number;
+import { Document } from "mongoose";
+
+export interface Driver extends Document {
+    _id: string;
     name: string;
     status: boolean;
-    orderid?: number;
+    orderid?: string;
 }

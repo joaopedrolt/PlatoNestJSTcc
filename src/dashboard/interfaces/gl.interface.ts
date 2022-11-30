@@ -1,6 +1,6 @@
-export interface Gl {
-    yield: string;
+import { Document } from "mongoose";
+
+export interface Gl extends Document {
+    yield: number;
     deliveries: number;
-    available: number;
-    date: string;
 }
