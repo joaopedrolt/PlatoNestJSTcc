@@ -195,4 +195,17 @@ export class OrdersService {
 
     }
 
+    async getDriverOrder(name: { name: string }) {
+
+        const order = await this.ordersModel.find();
+        const foundOrder = order.filter(order => order.driver.name == name.name);
+
+        if (foundOrder.length > 0) {
+            return foundOrder[0];
+        } else {
+            return {}
+        }
+
+    }
+
 }

@@ -29,6 +29,11 @@ export class OrdersController {
         return this.ordersPriceServices.getDistance(query.cepin, query.cepout);
     }
 
+    @Post('/driverorder')
+    get(@Body() body: {name: string}) {
+        return this.ordersServices.getDriverOrder(body);
+    }
+
     @Get('/price')
     getPrice(@Query() order) {
         const orderDto: OrderDto = { cepOut: order.cepout, cepIn: order.cepin, weight: parseFloat(order.weight) }
