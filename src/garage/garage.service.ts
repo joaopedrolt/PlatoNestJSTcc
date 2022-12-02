@@ -37,7 +37,7 @@ export class GarageService {
     }
 
     async deleteTruck(_id: string) {
-        return await this.trucksModel.remove({ _id: _id }).exec();;
+        return await this.trucksModel.deleteOne({ _id: _id }).exec();;
     }
 
     async truckUpdate(truckParam: Truck) {
@@ -51,6 +51,22 @@ export class GarageService {
             maxcapacity,
             status,
             orderid,
+        }
+
+        return await this.trucksModel.findOneAndReplace({ _id: truckParam._id }, truck).exec();
+
+    }
+
+    async truckReset(truckParam: Truck) {
+
+        const { model, plateNumber, axle, maxcapacity } = truckParam;
+
+        const truck = {
+            model,
+            plateNumber,
+            axle,
+            maxcapacity,
+            status: false
         }
 
         return await this.trucksModel.findOneAndReplace({ _id: truckParam._id }, truck).exec();

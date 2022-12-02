@@ -26,5 +26,6 @@ export const OrderSchema = new mongoose.Schema({
     },
     price: Number,
     distance: String,
-    accepted: Boolean
+    accepted: Boolean,
+    finished: Boolean
 }, { timestamps: false, collection: 'orders' });

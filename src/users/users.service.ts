@@ -14,6 +14,10 @@ export class UsersService {
         return await newUserModel.save()
     }
 
+    async deleteUser(name: string) {
+        return await this.usersModel.deleteOne({ name: name }).exec();
+    }
+
     async checkCredentials(userCredentials: UserLogin) {
         const user = await this.usersModel.find({ user: userCredentials.user, password: userCredentials.password });
 

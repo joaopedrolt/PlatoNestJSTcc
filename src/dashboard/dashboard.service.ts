@@ -12,13 +12,18 @@ export class DashboardService {
         return await this.glModel.find().exec();
     }
 
-   /*  async sumYield(value: number) {
+    async sumYield(value: number) {
 
-        const actualGlData = await this.glModel.find().exec();
-        const actualYield = actualGlData.values;
+        const actualGlData = await this.glModel.findOne({ _id: '6385885bbc391201f1d14deb' }).exec();
+        const actualYield = actualGlData.yield + value;
 
-        const newDriver = new this.glModel({yield: 0.00 , deliveries: 0});
-        return actualYield;
-    } */
+        const glNewInfo = {
+            yield: actualYield,
+            deliveries: actualGlData.deliveries + 1
+        }
+
+        return await this.glModel.findOneAndReplace({ _id: '6385885bbc391201f1d14deb' }, glNewInfo).exec();
+
+    }
 
 }

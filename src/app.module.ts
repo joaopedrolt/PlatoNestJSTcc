@@ -6,6 +6,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from './users/users.module';
+import { CustomersModule } from './customers/customers.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { UsersModule } from './users/users.module';
     DriversModule,
     DashboardModule,
     MongooseModule.forRoot('mongodb+srv://admin:lSi0B7vFVYu4PYCc@cluster0.eewgjf0.mongodb.net/plato?retryWrites=true&w=majority',),
-    UsersModule],
+    UsersModule,
+    CustomersModule],
   controllers: [],
   providers: [],
 })

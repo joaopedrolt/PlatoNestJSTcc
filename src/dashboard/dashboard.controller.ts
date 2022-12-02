@@ -11,9 +11,9 @@ export class DashboardController {
         return this.dashBoardServices.getGlData();
     }
 
-    /* @Post()
+    @Post('/sum')
     sumYield(@Body() value: { value: number}) {
         return this.dashBoardServices.sumYield(value.value);
-    } */
+    }
 
 }

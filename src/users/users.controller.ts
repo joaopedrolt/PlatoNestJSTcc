@@ -12,6 +12,11 @@ export class UsersController {
         return this.usersServices.addUser(user)
     }
 
+    @Post('/delete')
+    deleteUser(@Body() body: {name: string} ){
+        return this.usersServices.deleteUser(body.name);
+    }
+
     @Post('/check')
     checkCredentials(@Body() user: UserLogin){
         return this.usersServices.checkCredentials(user)

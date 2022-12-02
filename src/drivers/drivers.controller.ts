@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { DriversService } from './drivers.service';
 import { DriverDto } from './interfaces/driver.dto';
 import { Driver } from './interfaces/drivers.interface';
@@ -29,8 +29,13 @@ export class DriversController {
     }
 
     @Post('/delete')
-    deleteDriver(@Query() querry) {
-        return this.driversServices.deleteDrivers(querry.id);
+    deleteDriver(@Body() param: {id: string}) {
+        return this.driversServices.deleteDrivers(param.id);
+    }
+
+    @Post('/reset')
+    driverReset(@Body() driver: Driver) {
+        return this.driversServices.driverReset(driver);
     }
 
 }

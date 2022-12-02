@@ -24,7 +24,7 @@ export class DriversService {
     }
 
     async deleteDrivers(_id: string) {
-        return await this.driversModel.remove({ _id: '' }).exec();
+        return await this.driversModel.deleteOne({ _id: _id }).exec();
     }
 
     async getAvailibleDrivers() {
@@ -36,7 +36,18 @@ export class DriversService {
         const driver = {
             name: driverParam.name,
             status: driverParam.status,
-            orderid: driverParam.orderid,
+            orderid: driverParam.orderid
+        }
+
+        return await this.driversModel.findOneAndReplace({ _id: driverParam._id }, driver).exec();
+
+    }
+
+    async driverReset(driverParam: Driver) {
+
+        const driver = {
+            name: driverParam.name,
+            status: driverParam.status
         }
 
         return await this.driversModel.findOneAndReplace({ _id: driverParam._id }, driver).exec();

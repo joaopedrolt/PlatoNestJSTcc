@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom, map } from 'rxjs';
 
-import { AcceptOrder, OrderAdd, OrderUpdateDto } from './interfaces/order.dto';
+import { AcceptOrder, OrderAdd, OrderUpdateDto, UpdateOrderDesc } from './interfaces/order.dto';
 import { Order } from './interfaces/order.interface';
 
 import { InjectModel } from '@nestjs/mongoose';
@@ -129,7 +129,8 @@ export class OrdersService {
             accepted: false,
             statusdesc: 'Aguardando aprovação',
             distance: distance,
-            price: parseFloat(price)
+            price: parseFloat(price),
+            finished: false
         }
 
         try {
@@ -198,7 +199,8 @@ export class OrdersService {
     async getDriverOrder(name: { name: string }) {
 
         const order = await this.ordersModel.find();
-        const foundOrder = order.filter(order => order.driver.name == name.name);
+        let foundOrder = order.filter(order => order.driver.name == name.name);
+        foundOrder = foundOrder.filter(order => order.finished != true);
 
         if (foundOrder.length > 0) {
             return foundOrder[0];
@@ -206,6 +208,52 @@ export class OrdersService {
             return {}
         }
 
+    }
+
+    async updateOrderDesc(newDesc: UpdateOrderDesc) {
+
+            const order = await this.ordersModel.findOne({ _id: newDesc.orderId }).exec();
+
+            let orderCopy = {};
+
+            if(newDesc.statusDesc == "Finalizar Entrega"){
+                orderCopy = {
+                    desc: order.desc,
+                    weight: order.weight,
+                    addressin: order.addressin,
+                    cepin: order.cepin,
+                    addressout: order.addressout,
+                    cepout: order.cepout,
+                    price: order.price,
+                    distance: order.distance,
+                    driver: order.driver,
+                    truck: order.truck,
+                    statusdesc: "Finalizado com sucesso",
+                    status: order.status,
+                    accepted: order.accepted,
+                    finished: true
+                };
+            } else {
+                orderCopy = {
+                    desc: order.desc,
+                    weight: order.weight,
+                    addressin: order.addressin,
+                    cepin: order.cepin,
+                    addressout: order.addressout,
+                    cepout: order.cepout,
+                    price: order.price,
+                    distance: order.distance,
+                    driver: order.driver,
+                    truck: order.truck,
+                    statusdesc: newDesc.statusDesc,
+                    status: order.status,
+                    accepted: order.accepted,
+                    finished: order.finished
+                };
+            }
+
+            return await this.ordersModel.findOneAndReplace({ _id: newDesc.orderId }, orderCopy).exec();
+     
     }
 
 }

@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
-import { AcceptOrder, OrderAdd, OrderDto, OrderUpdateDto } from './interfaces/order.dto';
+import { AcceptOrder, OrderAdd, OrderDto, OrderUpdateDto, UpdateOrderDesc } from './interfaces/order.dto';
 import { OrdersService } from './orders.service';
 import { OrdersPriceService } from './price.service';
 
@@ -30,8 +30,13 @@ export class OrdersController {
     }
 
     @Post('/driverorder')
-    get(@Body() body: {name: string}) {
+    getDriverOrder(@Body() body: {name: string}) {
         return this.ordersServices.getDriverOrder(body);
+    }
+
+    @Post('/updatedesc')
+    updateDesc(@Body() body: UpdateOrderDesc) {
+        return this.ordersServices.updateOrderDesc(body);
     }
 
     @Get('/price')

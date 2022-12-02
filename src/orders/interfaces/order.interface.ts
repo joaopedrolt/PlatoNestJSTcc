@@ -18,4 +18,5 @@ export interface Order extends Document {
     price: number;
     distance: string;
     accepted: boolean;
+    finished: Boolean;
 }

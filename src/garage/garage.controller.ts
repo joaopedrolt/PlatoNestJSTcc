@@ -33,4 +33,9 @@ export class GarageController {
         return this.garageServices.truckUpdate(truck);
     }
 
+    @Post('/reset')
+    truckReset(@Body() truck: Truck) {
+        return this.garageServices.truckUpdate(truck);
+    }
+
 }

@@ -42,3 +42,8 @@ export type AcceptOrder = {
     orderId: string;
     accepted: boolean;
 }
+
+export type UpdateOrderDesc = {
+    orderId: string;
+    statusDesc: string;
+}
