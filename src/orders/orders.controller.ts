@@ -30,7 +30,7 @@ export class OrdersController {
     }
 
     @Post('/driverorder')
-    getDriverOrder(@Body() body: {name: string}) {
+    getDriverOrder(@Body() body: { name: string }) {
         return this.ordersServices.getDriverOrder(body);
     }
 
@@ -53,6 +53,11 @@ export class OrdersController {
     @Patch('/update/:id')
     update(@Param('id') id: string, @Body() orderUpdateDto: OrderUpdateDto) {
         return this.ordersServices.updateOrder(id, orderUpdateDto);
+    }
+
+    @Post('/cnpj')
+    getOrdersCnpj(@Body() cnpj: { cnpj: string }) {
+        return this.ordersServices.getOrderByCnpj(cnpj);
     }
 
     @Get(':id')

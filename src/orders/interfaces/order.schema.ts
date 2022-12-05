@@ -24,6 +24,15 @@ export const OrderSchema = new mongoose.Schema({
         status: Boolean,
         orderid: String
     },
+    customer: {
+        _id: String,
+        name: String,
+        cnpj: String,
+        numero: String,
+        email: String,
+        password: String,
+        orders: [String],
+    },
     price: Number,
     distance: String,
     accepted: Boolean,

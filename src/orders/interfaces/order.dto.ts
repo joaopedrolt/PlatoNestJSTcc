@@ -36,6 +36,15 @@ export type OrderAdd = {
     cepin: string;
     addressout: string;
     cepout: string;
+    customer: {
+        _id: string,
+        name: string,
+        cnpj: string,
+        numero: string,
+        email: string,
+        password: string,
+        orders: string[],
+    }
 }
 
 export type AcceptOrder = {

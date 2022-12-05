@@ -47,7 +47,7 @@ export class OrdersPriceService {
         distance = distance.replace(' km', '');
         distance = distance.replace(',', '');
 
-        const price = order.weight * (parseFloat(distance) * 0.1);
+        const price = order.weight * (parseFloat(distance) * 0.025);
 
         return price.toFixed(2);
 
