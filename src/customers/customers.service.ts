@@ -6,7 +6,7 @@ import { Cep } from 'src/orders/interfaces/cep.type';
 import { Customer } from './interfaces/customer.interface';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { AddCustomer, CustomerCredentials } from './interfaces/customer.dto';
+import { AddCustomer, CustomerCredentials, CustomerEmailCnpj } from './interfaces/customer.dto';
 
 @Injectable()
 export class CustomersService {
@@ -51,6 +51,37 @@ export class CustomersService {
 
     }
 
+    async checkEmailCnpj(credentials: CustomerEmailCnpj) {
+
+        const email = await this.customerModel.find({ email: credentials.email }).exec();
+        const cnpj = await this.customerModel.find({ cnpj: credentials.cnpj }).exec();
+
+        if (email.length > 0) {
+            if (cnpj.length > 0) {
+                return {
+                    email: false,
+                    cnpj: false
+                }
+            } else {
+                return {
+                    email: false,
+                    cnpj: true
+                }
+            }
+        } else if (cnpj.length > 0) {
+            return {
+                email: true,
+                cnpj: false
+            }
+        } else {
+            return {
+                email: true,
+                cnpj: true
+            }
+        }
+
+    }
+
     async getByCnpj({ cnpj }: { cnpj: string }) {
         return await this.customerModel.findOne({ cnpj: cnpj }).exec();
     }
@@ -81,9 +112,9 @@ export class CustomersService {
 
     }
 
-    async getOrders({cnpj}: {cnpj: string}) {
+    async getOrders({ cnpj }: { cnpj: string }) {
         const response = await this.customerModel.find({ cnpj: cnpj }).exec();
-        if(response.length > 0){
+        if (response.length > 0) {
             return response[0].orders;
         } else {
             return response;

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CustomersService } from './customers.service';
-import { AddCustomer, CustomerCredentials } from './interfaces/customer.dto';
+import { AddCustomer, CustomerCredentials, CustomerEmailCnpj } from './interfaces/customer.dto';
 
 @Controller('customers')
 export class CustomersController {
@@ -15,6 +15,11 @@ export class CustomersController {
      @Post('/add')
      addCustomer(@Body() customer: AddCustomer) {
           return this.customersServices.addCustomer(customer);
+     }
+
+     @Post('/emailcnpj')
+     checkEmailCnpj(@Body() credentials: CustomerEmailCnpj) {
+          return this.customersServices.checkEmailCnpj(credentials);
      }
 
      @Post('/check')

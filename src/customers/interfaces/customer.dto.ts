@@ -10,3 +10,8 @@ export type CustomerCredentials = {
     email: string;
     password: string;
 }
+
+export type CustomerEmailCnpj = {
+    email: string;
+    cnpj: string;
+}
