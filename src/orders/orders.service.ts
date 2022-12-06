@@ -83,6 +83,10 @@ export class OrdersService {
 
     }
 
+    async deleteOrder(_id: string) {
+        return await this.ordersModel.deleteOne({ _id: _id }).exec();
+    }
+
     async acceptOrder(accept: AcceptOrder) {
 
         const order = await this.ordersModel.findOne({ _id: accept.orderId }).exec();

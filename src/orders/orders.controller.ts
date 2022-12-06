@@ -50,6 +50,11 @@ export class OrdersController {
         return this.ordersServices.acceptOrder(accept);
     }
 
+    @Post('/delete')
+    deleteOrder(@Body() param: {id: string}) {
+        return this.ordersServices.deleteOrder(param.id);
+    }
+
     @Patch('/update/:id')
     update(@Param('id') id: string, @Body() orderUpdateDto: OrderUpdateDto) {
         return this.ordersServices.updateOrder(id, orderUpdateDto);
