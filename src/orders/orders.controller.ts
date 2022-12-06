@@ -51,8 +51,8 @@ export class OrdersController {
     }
 
     @Post('/delete')
-    deleteOrder(@Body() param: {id: string}) {
-        return this.ordersServices.deleteOrder(param.id);
+    deleteOrder(@Body() param: {orderId: string}) {
+        return this.ordersServices.deleteOrder(param.orderId);
     }
 
     @Patch('/update/:id')
