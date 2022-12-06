@@ -85,9 +85,9 @@ export class OrdersService {
 
     async acceptOrder(accept: AcceptOrder) {
 
-        if (accept.accepted) {
+        const order = await this.ordersModel.findOne({ _id: accept.orderId }).exec();
 
-            const order = await this.ordersModel.findOne({ _id: accept.orderId }).exec();
+        if (accept.accepted) {
 
             const orderCopy = {
                 desc: order.desc,
@@ -107,7 +107,24 @@ export class OrdersService {
             return await this.ordersModel.findOneAndReplace({ _id: accept.orderId }, orderCopy).exec();
 
         } else {
-            return await this.ordersModel.remove({ _id: accept.orderId }).exec();
+
+            const orderCopy = {
+                desc: order.desc,
+                weight: order.weight,
+                addressin: order.addressin,
+                cepin: order.cepin,
+                addressout: order.addressout,
+                cepout: order.cepout,
+                status: order.status,
+                statusdesc: 'Pedido Rejeitado - Entre em contado para mais informações',
+                price: order.price,
+                distance: order.distance,
+                accepted: false,
+                customer: order.customer
+            };
+
+            return await this.ordersModel.findOneAndReplace({ _id: accept.orderId }, orderCopy).exec();
+
         }
 
     }
@@ -174,15 +191,15 @@ export class OrdersService {
 
     }
 
-    async getOrderByCnpj({cnpj}: {cnpj: string}) {
+    async getOrderByCnpj({ cnpj }: { cnpj: string }) {
         const order = await this.ordersModel.find().exec();
         let foundOrder = order.filter(order => order.customer.cnpj == cnpj);
-     
+
         if (foundOrder.length > 0) {
             return foundOrder;
         } else {
             return cnpj;
         }
     }
-    
+
 }
