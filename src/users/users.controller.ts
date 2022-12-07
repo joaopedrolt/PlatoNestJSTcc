@@ -22,4 +22,9 @@ export class UsersController {
         return this.usersServices.checkCredentials(user)
     }
 
+    @Post('/validation')
+    driverValidation(@Body() body: { user: string }) {
+        return this.usersServices.driverValidation(body.user);
+    }
+
 }

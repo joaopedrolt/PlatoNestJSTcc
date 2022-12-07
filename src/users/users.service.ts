@@ -37,4 +37,16 @@ export class UsersService {
         
     }
 
+    async driverValidation(user: string) {
+
+        const userResponse = await this.usersModel.find({ user }).exec();
+
+        if (userResponse.length > 0) {
+            return {user: false};
+        } else {
+            return {user: true};
+        }
+
+    }
+
 }

@@ -21,15 +21,15 @@ export class DriversController {
     @Post('/update')
     driverUpdate(@Body() driver: Driver) {
         return this.driversServices.driverUpdate(driver);
-    } 
-    
+    }
+
     @Post('/add')
     addDriver(@Body() driverDto: DriverDto) {
         return this.driversServices.addDrivers(driverDto);
     }
 
     @Post('/delete')
-    deleteDriver(@Body() param: {id: string}) {
+    deleteDriver(@Body() param: { id: string }) {
         return this.driversServices.deleteDrivers(param.id);
     }
 
@@ -38,4 +38,4 @@ export class DriversController {
         return this.driversServices.driverReset(driver);
     }
 
-}
+} 

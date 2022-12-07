@@ -38,4 +38,9 @@ export class GarageController {
         return this.garageServices.truckUpdate(truck);
     }
 
+    @Post('/validation')
+    driverValidation(@Body() body: { plateNumber: string, model: string }) {
+        return this.garageServices.truckValidation(body);
+    }
+
 }

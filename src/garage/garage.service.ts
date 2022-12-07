@@ -72,4 +72,37 @@ export class GarageService {
         return await this.trucksModel.findOneAndReplace({ _id: truckParam._id }, truck).exec();
 
     }
+
+    async truckValidation({ plateNumber, model }: { plateNumber: string, model: string }) {
+
+        const modelResponse = await this.trucksModel.find({ model }).exec();
+
+        const plateResponse = await this.trucksModel.find({ plateNumber }).exec();
+
+        if (modelResponse.length > 0) {
+            if (plateResponse.length > 0) {
+                return {
+                    model: false,
+                    plateNumber: false
+                }
+            } else {
+                return {
+                    model: false,
+                    plateNumber: true
+                }
+            }
+        } else if (plateResponse.length > 0) {
+            return {
+                model: true,
+                plateNumber: false
+            }
+        } else {
+            return {
+                model: true,
+                plateNumber: true
+            }
+        }
+
+    }
+
 }
