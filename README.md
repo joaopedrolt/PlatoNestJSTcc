@@ -1,4 +1,4 @@
-<h2 align="center">Tcc - NestJs Api</h2>
+<h2 align="center">NestJS API REST - TCC</h2>
 
 ## Índice
 
@@ -9,7 +9,7 @@
 
 ## Descrição
 
-
+API REST desenvolvida em NestJS, que utiliza o MongoDB como seu sistema de gerenciamento de banco de dados. A API tem como objetivo fornecer um serviço de integração entre a API do Google Maps e a API dos Correios, devolvendo as informações relevantes para o front-end.
 
 ## Tecnologias Utilizadas
 
