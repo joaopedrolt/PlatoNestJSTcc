@@ -1,4 +1,4 @@
-<h2 align="center">NestJS API REST - TCC</h2>
+<h2 align="center">NestJS - API REST - TCC</h2>
 
 ## Índice
 
